@@ -7,17 +7,18 @@ const UpdateForm = props =>{
     title: "",
     director: "",
     metascore: "",
+    stars: []
   })
 
   const { id } = useParams();
 
   useEffect(() => {
-  //   const itemToUpdate = props.items.find(item => `${item.id}` === id);
+    //   const itemToUpdate = props.items.find(item => `${item.id}` === id);
 
-  //   if (itemToUpdate) {
-  //     setItem(itemToUpdate);
-  //   }
-  // }, [props.items, id]);
+    //   if (itemToUpdate) {
+    //     setItem(itemToUpdate);
+    //   }
+    // }, [props.items, id]);
     axios.get(`http://localhost:5000/api/movies/${id}`)
     .then(res => {setItem(res.data)})
     .catch(err => console.log(err))
@@ -27,7 +28,14 @@ const UpdateForm = props =>{
     setItem({
       ...item,
       [e.target.name]:e.target.value
-      })
+    })
+  }
+
+  const changeStars = e => {
+    setItem({
+      ...item,
+      [e.target.name]:e.target.value.split(',')
+    })
   }
 
   const handleSubmit = e => {
@@ -38,33 +46,47 @@ const UpdateForm = props =>{
         props.history.push(`/movies/${id}`);
       })
       .catch(err => console.log(err))
-    }
+  }
 
-    return (
-      <div>
-        <h2>Update {item.title}</h2>
+  return (
+    <div>
+      <h2 className='form-title'>{item.title}</h2>
+      <form onSubmit={handleSubmit}>
+        <input 
+          type='text'
+          name="title" 
+          value={item.title}
+          onChange={changeHandler}
+        />
+        <div className="baseline" />
 
-        <form onSubmit={handleSubmit}>
-          <input 
-            name="title" 
-            value={item.title}
-            onChange={changeHandler}
-          />
+        <input 
+          type='text'
+          name="director"
+          value={item.director}
+          onChange={changeHandler} 
+        />
+        <div className="baseline" />
 
-          <input 
-            name="director"
-            value={item.director}
-            onChange={changeHandler} 
-          />
+        <input 
+          type='text'
+          name="metascore"
+          value={item.metascore}
+          onChange={changeHandler} 
+        />
+        <div className="baseline" />
 
-          <input name="metascore"
-            value={item.metascore}
-            onChange={changeHandler} 
-          />
+        <input 
+          type='text'
+          name="stars"
+          value={item.stars}
+          onChange={changeStars} 
+        />
+        <div className="baseline" />
 
-        <button>Update</button>
-        </form>
-      </div>
+        <button className='form-button'>Update</button>
+      </form>
+    </div>
   );
 };
 
